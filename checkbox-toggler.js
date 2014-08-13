@@ -16,7 +16,7 @@ $.fn.checkboxToggler = function(selector) {
 
 	return this.each(function() {
 		
-		var	$this = $(this);
+		var	$parent = $(this);
 		
 		// get all "child" checkboxes
 		var checkChildren = $(selector);
@@ -25,7 +25,7 @@ $.fn.checkboxToggler = function(selector) {
 		var numChecked = checkChildren.filter(':checked').length;
 		
 		if (numChecked === checkChildren.length) {
-			$this.prop('checked', true)
+			$parent.prop('checked', true)
 		}
 	
 		$.each(checkChildren, function() {
@@ -35,18 +35,21 @@ $.fn.checkboxToggler = function(selector) {
 			 *	or decrement the number of checked children so
 			 *	parent can be checked/unchecked automatically
 			 */
-			$(this).click(function() {
+			 
+			var $this = $(this);
+			 
+			$this.click(function() {
 				
-				if (!$(this).prop('checked')) {
+				if (!$this.prop('checked')) {
 					numChecked--;
 				} else {
 					numChecked++;							
 				}
 				
 				if (numChecked < checkChildren.length) {
-					$this.prop('checked', false);
+					$parent.prop('checked', false);
 				} else {
-					$this.prop('checked', true);
+					$parent.prop('checked', true);
 				}
 				
 				callback.call(null, checkChildren.length, numChecked)
@@ -56,9 +59,9 @@ $.fn.checkboxToggler = function(selector) {
 		});
 		
 		// attach click event to the "parent" checkbox
-		$this.click(function() {
+		$parent.click(function() {
 			
-			var state = $this.prop('checked');
+			var state = $parent.prop('checked');
 			
 			if (!state) {
 				numChecked = 0;					
