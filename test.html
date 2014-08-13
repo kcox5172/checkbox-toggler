@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<title>Checkbox Toggler Test</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="checkbox-toggler.js"></script>
+	</head>
+	<body>
+
+		<input type="checkbox" name="nameToggler"> Check all names
+		<br>
+		<input type="checkbox" name="name"> Joe
+		<br>
+		<input type="checkbox" name="name"> Mike
+		<br>
+		<input type="checkbox" name="name"> Rick
+		<br>
+		<input type="checkbox" name="name"> Carl
+		<br>
+		<input type="checkbox" name="name"> Ben
+		<br>
+		<input type="checkbox" name="name"> Lou
+		
+		<br><br>
+		
+		<input type="checkbox" name="occupationToggler"> Check all occupations
+		<br>
+		<input type="checkbox" name="occupation"> Attorney
+		<br>
+		<input type="checkbox" name="occupation"> Doctor
+		<br>
+		<input type="checkbox" name="occupation"> Florist
+		<br>
+		<input type="checkbox" name="occupation"> Carpenter
+		<br>
+		<input type="checkbox" name="occupation"> Programmer
+		<br>
+		<input type="checkbox" name="occupation"> Accountant
+
+		<script>
+		
+			$('input[name="nameToggler"]').checkboxToggler('input[name="name"]', function(total, checked) {
+				
+				console.log(checked + ' of ' + total + ' names checked');
+				
+			});
+			
+			$('input[name="occupationToggler"]').checkboxToggler('input[name="occupation"]', function(total, checked) {
+				
+				console.log(checked + ' of ' + total + ' occupations checked');
+				
+			});
+		
+		</script>
+
+	</body>
+</html>
