@@ -1,85 +1,53 @@
-$.fn.checkboxToggler = function(selector) {
+$.fn.checkboxToggler = function(selector, callback) {
 	
 	/**
-	 *	accepts optional callback as second argument
+	 *	$('parentCheckbox').checkboxToggler('[name="delete"]');
 	 *
-	 *	$('selector').checkboxToggler('[name="delete"]', function(total, checked) {
-	 *		console.log(total, checked);	
+	 *	accepts optional callback
+	 *
+	 *	$('parentCheckbox').checkboxToggler('[name="delete"]', function(numChildren, numChecked) {
+	 *		console.log(numChildren, numChecked);	
 	 *	});
 	 */
-
-	var callback = function() {};
-
-	if (arguments.length === 2) {
-		callback = arguments[1];
-	}
 
 	return this.each(function() {
 		
 		var	$parent = $(this);
+		var $children = $(selector);
+		var numChildren = $children.length;
+		var numChecked = $children.filter(':checked').length;
 		
-		// get all "child" checkboxes
-		var checkChildren = $(selector);
-		
-		// get how many are checked initially
-		var numChecked = checkChildren.filter(':checked').length;
-		
-		if (numChecked === checkChildren.length) {
-			$parent.prop('checked', true)
+		if (numChecked === numChildren) {
+			$parent.prop('checked', true);
 		}
-	
-		$.each(checkChildren, function() {
-			
-			/**
-			 *	bind function to each child that will increment
-			 *	or decrement the number of checked children so
-			 *	parent can be checked/unchecked automatically
-			 */
-			 
-			var $this = $(this);
-			 
-			$this.click(function() {
-				
-				if (!$this.prop('checked')) {
-					numChecked--;
-				} else {
-					numChecked++;							
-				}
-				
-				if (numChecked < checkChildren.length) {
-					$parent.prop('checked', false);
-				} else {
-					$parent.prop('checked', true);
-				}
-				
-				callback.call(null, checkChildren.length, numChecked)
-				
-			});
-			
-		});
 		
-		// attach click event to the "parent" checkbox
-		$parent.click(function() {
+		$parent.on('click', function() {
 			
-			var state = $parent.prop('checked');
+			var isChecked = $parent.prop('checked');
 			
-			if (!state) {
-				numChecked = 0;					
-			} else {
-				numChecked = checkChildren.length;
+			numChecked = isChecked ? numChildren : 0;
+			
+			$children.prop('checked', isChecked);
+			
+			if (callback) {
+				callback.call(null, numChildren, numChecked);
 			}
 			
-			// check/uncheck each child
-			$.each(checkChildren, function() {
+		});
+	
+		$children.on('click', function() {
 			
-				$(this).prop('checked', state);
+			var $this = $(this);
+
+			$this.prop('checked') ? numChecked++ : numChecked--;
+			$parent.prop('checked', (numChecked === numChildren));
 			
-			});
-			
-			callback.call(null, checkChildren.length, numChecked)
+			if (callback) {
+				callback.call(null, numChildren, numChecked);
+			}
 			
 		});
 		
 	});
-	  
+	
 };
